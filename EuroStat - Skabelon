@@ -1,0 +1,41 @@
+# Installer pakken én gang:
+# install.packages("restatapi")
+
+library(restatapi)
+
+# 1. INDSÆT TABELKODE
+tabel <- "INDSÆT_TABELKODE"             # Fx "namq_10_fcs"
+
+# 2. SE TABELLENS VARIABLE OG MULIGE KODER
+meta <- get_eurostat_dsd(tabel)
+
+print(meta)
+
+# 3. INDSÆT VARIABLE OG KODER FRA METADATA
+# Tilføj eller fjern linjer, så filtrene passer til tabellen.
+# Brug c("kode1", "kode2") for flere værdier.
+# Udelad et filter, hvis du vil hente alle værdier for variablen.
+
+filtre <- list(
+  geo = c("INDSÆT_LANDEKODE_1", "INDSÆT_LANDEKODE_2"),
+  INDSÆT_VARIABEL_1 = "INDSÆT_KODE",
+  INDSÆT_VARIABEL_2 = "INDSÆT_KODE"
+)
+
+# 4. INDSÆT FREKVENS OG PERIODE
+frekvens <- "INDSÆT_FREKVENS"          # "A" = år, "Q" = kvartal, "M" = måned
+periode <- "INDSÆT_START:INDSÆT_SLUT"   # Fx "2020-01-01:2024-12-31"
+
+# 5. HENT DATA
+data_eu <- get_eurostat_data(
+  id = tabel,
+  filters = filtre,
+  select_freq = frekvens,
+  date_filter = periode,
+  label = FALSE,
+  stringsAsFactors = FALSE
+)
+
+# 6. SE RESULTATET
+View(data_eu)
+names(data_eu)
