@@ -1,0 +1,40 @@
+# Installer pakken én gang:
+# install.packages("dkstat")
+
+library(dkstat)
+
+# 1. INDSÆT TABELKODE
+tabel <- "INDSÆT_TABELKODE"             # Fx "BY3" eller "FORV1"
+
+# 2. SE TABELLENS VARIABLE OG MULIGE VÆRDIER
+meta <- dst_meta(table = tabel, lang = "da")
+
+View(meta$variables)                  # Variabelnavne
+print(meta$values)                    # Mulige værdier for hver variabel
+
+# 3. INDSÆT VARIABLE OG VÆRDIER FRA METADATA
+# Tilføj eller fjern linjer, så filtrene passer til tabellen.
+# Brug "*" for alle værdier eller c("værdi1", "værdi2") for flere.
+
+filtre <- list(
+  INDSÆT_VARIABEL_1 = "INDSÆT_VÆRDI",
+  INDSÆT_VARIABEL_2 = c("INDSÆT_VÆRDI_1", "INDSÆT_VÆRDI_2"),
+  Tid = c("INDSÆT_PERIODE_1", "INDSÆT_PERIODE_2")
+)
+
+# Tid: fx c("2023", "2024"), c("2024K1", "2024K2")
+# eller c("2024M01", "2024M02"). Brug tabellens tidsformat.
+# Brug det præcise variabelnavn for tid fra metadata.
+
+# 4. HENT DATA
+data_dk <- dst_get_data(
+  table = tabel,
+  query = filtre,
+  meta_data = meta,
+  lang = "da",
+  parse_dst_tid = FALSE
+)
+
+# 5. SE RESULTATET
+View(data_dk)
+names(data_dk)
